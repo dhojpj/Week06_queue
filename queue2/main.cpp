@@ -7,21 +7,12 @@ using namespace std;
 
 int main()
 {
-    queue<int> i;
+    queue<string> i;
 
 
-    i.enqueue(5);
+    cin >> i;
 
-
-    int r;
-
-    i.dequeue(r);
-
-
-    cout << r << endl;
-
-    cout << i.size() << endl;
-
+    cout << i << endl;
 
 
 

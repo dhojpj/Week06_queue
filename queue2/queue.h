@@ -22,7 +22,7 @@ template<typename T>
 class queue
 {
 public:
-    queue(size_t s = 10);
+    queue(size_t s = 5);
     ~queue();
     queue(const queue<T>& other);
     queue<T>& operator=(const queue<T>& other);
@@ -86,13 +86,12 @@ queue<T>& queue<T>::operator=(const queue<T>& other)
     return *this;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 template<typename T>
 bool queue<T>::full()
 {
 
-    // doesn't this mean that it's empty, not that it's full?
-    return head == (tail + 1)% max_qty; // +1 because we added 1 in the constructor
+    // when tail is at the end, and one away from the head
+    return head == (tail + 1) % max_qty; // +1 because we added 1 in the constructor
 }
 
 template<typename T>
@@ -161,7 +160,7 @@ void queue<T>::enqueue(const T&data)
 //            cout << "que[tail] = " << que[0] << endl;
 
 
-                                          cout << "tail++ = " << tail << endl;
+//                                          cout << "tail++ = " << tail << endl;
     tail %= max_qty;
 }
 
@@ -226,7 +225,6 @@ void queue<T>::nukem()
     delete [] que;
 }
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 template<typename Y>
 ostream& operator<<(ostream &out, const queue<Y>& q)
 {
@@ -244,26 +242,67 @@ ostream& operator<<(ostream &out, const queue<Y>& q)
 
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 template<typename Y>
 istream& operator>>(istream &in, queue<Y>& q)
 {
-//    string input;
-//    Y inputOther;
-//    if(string(typeid(Y).name()) == "Ss")
-//    {
-//        while(getline(in,input)) // why while?
-//        {
-//            q << input; // convert strings?
-//        }
-//    }
-//    else
-//    {
-//        while(in>>inputOther)
-//        {
-//            q << inputOther;
-//        }
-//    }
+
+    if(string(typeid(Y).name()) == "Ss" && !q.full())
+    {
+        string input;
+        while(getline(in,input)) // why while?
+        {
+            try
+            {
+                q << input;
+
+            }
+
+            catch(...)
+            {
+                break;
+            }
+
+            if (q.full())
+            {
+                break;
+            }
+
+
+        }
+    }
+    else
+    {
+
+        Y inputOther;
+
+
+//            in>>inputOther;
+            while(in>>inputOther)
+            {
+                try
+                {
+                    q << inputOther;
+                }
+    //            q.enqueue(inputOther);
+
+                catch(...)
+                {
+                    break;
+                }
+
+                if (q.full())
+                {
+                    break;
+                }
+
+            }
+
+
+
+
+
+//        break;
+    }
     return in;
 
 }
